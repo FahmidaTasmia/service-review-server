@@ -21,7 +21,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
     try{
         const serviceCollection = client.db('iDot').collection('services');
-
+        const orderCollection=client.db('iDot').collection('orders');
         app.get('/services', async(req,res)=>{
             const query ={};
             const cursor = serviceCollection.find(query);
@@ -42,6 +42,13 @@ async function run(){
             const services = await serviceCollection.findOne(query);
             res.send(services);
 
+        });
+
+        //create api for orders 
+        app.post('/orders' , async(req,res)=>{
+            const order = req.body;
+            const result= await orderCollection.insertOne(order);
+            res.send(result);
         })
 
         
