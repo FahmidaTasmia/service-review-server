@@ -22,6 +22,7 @@ async function run(){
     try{
         const serviceCollection = client.db('iDot').collection('services');
         const orderCollection=client.db('iDot').collection('orders');
+        const reviewCollection=client.db('iDot').collection('reviews');
         app.get('/services', async(req,res)=>{
             const query ={};
             const cursor = serviceCollection.find(query);
@@ -84,6 +85,42 @@ async function run(){
             res.send(result);
         });
 
+        //review api created
+
+        
+        //add new review
+         app.post('/add-reviews' , async(req,res)=>{
+          try{
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+
+            if(result.acknowledged && result.insertedId){
+                res.send({
+                    success:true,
+                    message:"Successfully added a Review"
+                });
+            }
+            else{
+                res.send({
+                    success:false,
+                    error:"something went Wrong"
+                })
+            }
+
+          }
+
+          catch(error){
+            res.send({
+                success:false,
+                error:"error.message",
+            });
+          }
+        });
+
+       
+
+       
+ 
         
     }
 
